@@ -1,0 +1,16 @@
+:root{
+  --var--bg-color: #121213;
+  --var--border-color: #3A3A3C;
+}
+
+
+body {
+  background-color: var(--var--bg-color);
+  padding: 0;
+  margin: 0;
+
+}
+
+/* .container {
+  border: 1px solid var(--var--border-color);
+} */

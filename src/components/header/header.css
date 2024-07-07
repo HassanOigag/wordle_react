@@ -1,0 +1,11 @@
+header{
+    border-bottom: 1px solid var(--var--border-color);
+    color: white;
+    text-align: center;
+  }
+  
+  .title {
+      font-family: 'KARNAK' , 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;  
+      font-size: 2em;
+      font-weight: bold;
+    }
