@@ -13,7 +13,8 @@ function has(string, char)
 
 function Grid(){
     // let uniq = 0/
-
+    const word = "smile";
+    const [guess, setGuess] = useState("");
     const [pos, setPos] = useState({row: 0, col: 0})
     const [grid, setGrid] = useState(
         [
@@ -24,17 +25,25 @@ function Grid(){
         ["","","","",""],
         ["","","","",""],
     ]);
-
+    function checkGuess(guess)
+    {
+        const word = "smile";
+        console.log("word ", word);
+        console.log("guess ", guess);
+    }
 
     const letters = "abcdefghijklmnopqrstuvwxyz";
     useEffect(() => {
         const handleKeyDown = (event) => {
-          if (has(letters, event.key) || event.key === "Backspace") {
+
+            console.log(event.key);
+          if (has(letters, event.key) || event.key === "Backspace" || event.key === "Enter") {
             // Update grid
+            
             setGrid((oldGrid) => {
               const newGrid = oldGrid.map((row, rowIndex) => {
                 return row.map((cell, colIndex) => {
-                  if (rowIndex === pos.row && colIndex === pos.col) {
+                  if (rowIndex === pos.row && colIndex === pos.col && event.key !== "Enter") {
                     return event.key;
                   }
                   return cell;
@@ -42,14 +51,15 @@ function Grid(){
               });
               return newGrid;
             });
-    
-            // Update position
-            setPos((oldPos) => {
-              if (oldPos.col >= 4) {
-                return { col: 0, row: oldPos.row + 1 };
-              } else {
-                return { col: oldPos.col + 1, row: oldPos.row };
-              }
+            // Update position  
+            setPos((oldPos) => {            
+                if (oldPos.col >= 4 && event.key === "Enter") {
+                    const guess = grid[oldPos.row].join("");
+                    checkGuess(guess);
+                    return { col: 0, row: oldPos.row + 1};
+                } else {
+                    return { col: event.key !== "Enter" ? oldPos.col + 1 : oldPos.col, row: oldPos.row };
+                }
             });
           } else {
             console.log("I can't");
@@ -57,7 +67,6 @@ function Grid(){
         };
     
         window.addEventListener("keydown", handleKeyDown);
-    
         return () => {
           window.removeEventListener("keydown", handleKeyDown);
         };
@@ -68,7 +77,6 @@ function Grid(){
             grid.map((row, i) => {
                 return row.map((col, j) =>{
                     let uniq = `${i}-${j}`;
-                    // console.log(col, j);
                     return <div key={uniq} className="cell"><h2>{col.toUpperCase()}</h2></div>
                 })
             })
