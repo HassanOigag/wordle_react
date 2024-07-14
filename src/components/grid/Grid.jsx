@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import "./grid.css";
 
+function count(string, letter)
+{
+    return string.split(letter).length - 1;
+}
+
 function isSupportedKey(string, key) {
     if (key === "Backspace" || key === "Enter") return true;
     return string.includes(key);
@@ -15,20 +20,27 @@ function decrementCol(col) {
 }
 
 function Grid() {
-    const word = "smile";
+    const correctWord = "slile";
+
+    const wordStats = {}
+    for (let i = 0; i < correctWord.length; i++)
+    {
+        if (correctWord[i] in wordStats)
+            wordStats[correctWord[i]] += 1;
+        else
+        wordStats[correctWord[i]] = 1   ;
+    }
+
+    console.log(wordStats);
+
     const [pos, setPos] = useState({ row: 0, col: 0 });
     const [grid, setGrid] = useState(Array.from({ length: 6 }, () => Array(5).fill("")));
-
     const letters = "abcdefghijklmnopqrstuvwxyz";
-
-    function updateGrid()
-    {
-      
-    }
 
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (isSupportedKey(letters, event.key)) {
+            
                 setGrid((oldGrid) => {
                     const newGrid = oldGrid.map((row, rowIndex) => {
                         return row.map((cell, colIndex) => {
@@ -61,15 +73,43 @@ function Grid() {
 
                 // Animate cells
                 const cells = document.querySelectorAll(".cell");
+                if (event.key === "Enter" && pos.col > 4)
+                {
+                    let seenLetters = []
+                    let word = grid[pos.row].join("")
+                    for (let i = 0; i < word.length; i++)
+                    {
+                        seenLetters.push(word[i]);
+                        const cellIndex = pos.row * 5 + i;
+                        if (word[i] === correctWord[i])
+                        {
+                            cells[cellIndex].classList.add("correct");
+                            cells[cellIndex].style.borderColor = "#548D4E";
+                            
+                        }
+                        else if (correctWord.includes(word[i]) && count(correctWord, word[i]) <= seenLetters.length )
+                        {
+                            cells[cellIndex].classList.add("missplaced");
+                            cells[cellIndex].style.borderColor = "#B49F3B";
+                        }
+                        else{
+                            cells[cellIndex].classList.add("wrong");
+                            cells[cellIndex].style.borderColor = "#3A3A3D";
+                        }
+                    }
+                }
                 if (event.key === "Backspace"){
                     const cellIndex = pos.row * 5 + pos.col - 1;
-                    cells[cellIndex].classList.remove("animate");
+                    console.log(cellIndex);
+                    if (cellIndex >= 0)
+                        cells[cellIndex].classList.remove("animate");
                 }
                 
                 if (event.key !== "Enter" && event.key !== "Backspace" && pos.col <= 4)
                 {
-                  const cellIndex = pos.row * 5 + pos.col;
-                  cells[cellIndex].classList.add("animate");
+                    const cellIndex = pos.row * 5 + pos.col;
+                    if (cellIndex >= 0)
+                        cells[cellIndex].classList.add("animate");
                 }
 
             } else {

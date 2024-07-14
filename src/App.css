@@ -1,6 +1,9 @@
 :root {
     --var--bg-color: #121213;
     --var--border-color: #3A3A3C;
+    --var--yellow: #B49F3B;
+    --var--green: #548D4E;
+    --var--grey: #3A3A3D;
 }
 
 body {
@@ -9,9 +12,27 @@ body {
     margin: 0;
 }
 
+.correct {
+    background-color: var(--var--green);
+    border: 2px solid var(--var--green);
+    transition: flip 0.5s ease;
+}
+
+.wrong {
+    background-color: var(--var--grey);
+    border-color: var(--var--grey);
+    transition: flip 0.5s ease;
+}
+
+.missplaced {
+    background-color: var(--var--yellow);
+    border: 2px solid var(--var--yellow);
+    transition: flip 0.5s ease;
+}
+
 
 /* .container {
-  border: 1px solid var(--var--border-color);
+border: 1px solid var(--var--border-color);
 } */
 
 @keyframes jiggle {
