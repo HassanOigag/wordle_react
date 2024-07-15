@@ -31,7 +31,6 @@ function Grid() {
     const [pos, setPos] = useState({ row: 0, col: 0 });
     const [grid, setGrid] = useState(Array.from({ length: 6 }, () => Array(5).fill("")));
     const letters = "abcdefghijklmnopqrstuvwxyz";
-    let seenLetters = [];
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (isSupportedKey(letters, event.key)) {
@@ -70,6 +69,7 @@ function Grid() {
                 const cells = document.querySelectorAll(".cell");
                 if (event.key === "Enter" && pos.col > 4)
                 {
+                    let seenLetters = [];
                     let word = grid[pos.row].join("")
                     for (let i = 0; i < word.length; i++)
                     {
