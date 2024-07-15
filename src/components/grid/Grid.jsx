@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import "./grid.css";
 
-function count(string, letter)
+function count(arr, letter)
 {
-    return string.split(letter).length - 1;
+    let counter = 0;
+    for(let i = 0; i < arr.length; i++) {
+        if (letter === arr[i])
+            counter += 1;
+    }
+    return counter;
 }
 
 function isSupportedKey(string, key) {
@@ -19,24 +24,14 @@ function decrementCol(col) {
     return col > 0 ? col - 1 : 0;
 }
 
+
+
 function Grid() {
     const correctWord = "slile";
-
-    const wordStats = {}
-    for (let i = 0; i < correctWord.length; i++)
-    {
-        if (correctWord[i] in wordStats)
-            wordStats[correctWord[i]] += 1;
-        else
-        wordStats[correctWord[i]] = 1   ;
-    }
-
-    console.log(wordStats);
-
     const [pos, setPos] = useState({ row: 0, col: 0 });
     const [grid, setGrid] = useState(Array.from({ length: 6 }, () => Array(5).fill("")));
     const letters = "abcdefghijklmnopqrstuvwxyz";
-
+    let seenLetters = [];
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (isSupportedKey(letters, event.key)) {
@@ -75,7 +70,6 @@ function Grid() {
                 const cells = document.querySelectorAll(".cell");
                 if (event.key === "Enter" && pos.col > 4)
                 {
-                    let seenLetters = []
                     let word = grid[pos.row].join("")
                     for (let i = 0; i < word.length; i++)
                     {
@@ -87,7 +81,7 @@ function Grid() {
                             cells[cellIndex].style.borderColor = "#548D4E";
                             
                         }
-                        else if (correctWord.includes(word[i]) && count(correctWord, word[i]) <= seenLetters.length )
+                        else if (correctWord.includes(word[i]) && seenLetters.includes(word[i]) && count(seenLetters, word[i]) <= count(correctWord, word[i]))
                         {
                             cells[cellIndex].classList.add("missplaced");
                             cells[cellIndex].style.borderColor = "#B49F3B";
