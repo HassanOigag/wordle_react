@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 import "./grid.css";
+import fiveLetterWords from "../../words";
+
+
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function count(arr, letter)
 {
@@ -24,10 +30,10 @@ function decrementCol(col) {
     return col > 0 ? col - 1 : 0;
 }
 
+const correctWord = fiveLetterWords[getRandomNumber(0, fiveLetterWords.length)];
 
 
 function Grid() {
-    const correctWord = "slile";
     const [pos, setPos] = useState({ row: 0, col: 0 });
     const [grid, setGrid] = useState(Array.from({ length: 6 }, () => Array(5).fill("")));
     const letters = "abcdefghijklmnopqrstuvwxyz";
@@ -71,6 +77,17 @@ function Grid() {
                 {
                     let seenLetters = [];
                     let word = grid[pos.row].join("")
+                    if (!fiveLetterWords.includes(word))
+                    {
+                        alert("not a word in the list");
+                        setPos(oldValue => {
+                            return{
+                                col: 5,
+                                row: oldValue.row - 1
+                            }
+                        });
+                        return;
+                    }
                     for (let i = 0; i < word.length; i++)
                     {
                         seenLetters.push(word[i]);
